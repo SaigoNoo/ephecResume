@@ -1,24 +1,35 @@
-# VLAN
-Un VLAN permet de créer un réseau LAN virtuel. Il s'agit de séparer la structure physique de la stack logicielle
-(stack 2 OSI: Liaison de données).
-
+# InterVLAN
+Un interVLAN (qui veut dire, rediriger du trafic VLAN sous forme de routage), permet de redistribuer des paquets destinés
+à un VLAN lorsque l'on a pas de Switch Layer 3.
 ## Interet:
-- Créer autant de réseaux que voulus
-- Gérer les accès a X VLAN en fonction de X entité (service entreprise p.e.)
+- On veut diviser un 0 en plusieurs VLAN mais on a pas de Switch Layer 3
 
 ## Images
-![img.png](img.png)Exemple de disposition de routeurs pour utiliser du RIP
+![img_1.png](img_1.png)<br>Exemple de disposition de cas interVLAN où l'on a pas de SWL3 (Switch Layer 3)
 
-## Exemple sur Image
-<b>PC1 veut joindre PC2.</b><br>
-Les routeurs n'ont pas l'adresse réseau du prochain hop (routeur).<br>
 
 ## En code ça donne quoi ?
 ```
-R1 (config)         > router rip
-R1 (config-router)  > version 2
-R1 (config-router)  > network 192.168.1.0
-R1 (config-router)  > network 192.168.3.0
-R1 (config-router)  > exit
+R1 (config)            > int G0/1
+R1 (config-if)         > no ip addr
+R1 (config-if)         > no shutdown
+R1 (config-if)         > int G0/1.10
+R1 (config-subif)      > encapsulation dot1Q 10
+R1 (config-subif)      > ip addr 10.0.0.1 255.0.0.0
 ```
->  **⚠️ Si le ping ne traverse pas les routeurs**: Vérifier que les PC sont connectés à leur GATEWAY !
+>  **⚠️ Refaire les G0/1.x autant de fois que l'on a des VLAN à déclarer !**
+
+>  **⚠️ Pour les VLAN natifs:**
+  ## Conditions
+  - [ ] Peu importe si l'on a des des switch layer 3 ou pas
+  - [ ] On l'utilise si on fait par exemple de l'IOT (domotique) et que les appareils sont:
+    - [X] Incapable de lire les flags VLAN dans les trames ethernet
+<br>
+<br>
+```
+R1 (config)            > int G0/1
+R1 (config-if)         > no ip addr
+R1 (config-if)         > no shutdown
+R1 (config-if)         > int G0/1.10
+R1 (config-subif)      > encapsulation dot1Q 10 native
+```
