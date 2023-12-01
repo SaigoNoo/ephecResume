@@ -1,4 +1,11 @@
-# Routage RIP
+# VLAN
+Un VLAN permet de créer un réseau LAN virtuel. Il s'agit de séparer la structure physique de la stack logicielle
+(stack 2 OSI: Liaison de données).
+
+## Interet:
+- Créer autant de réseaux que voulus
+- Gérer les accès a X VLAN en fonction de X entité (service entreprise p.e.)
+
 ## Images
 ![img.png](img.png)Exemple de disposition de routeurs pour utiliser du RIP
 
